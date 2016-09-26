@@ -24,69 +24,6 @@ module.exports = function(app, passport) {
 		}
 	);
 
-	// pocket stuff
-	app.get(
-		'/pocket',
-		function(req, res) {
-			request.post(
-				'https://getpocket.com/v3/oauth/request',
-				{
-					form: {
-						'consumer_key': '52536-e13f20f362ab224fd17b5257',
-						'redirect_uri': 'http://ratesh.it/pocket/'
-					}
-				},
-				function(error, response, body) {
-					var code = body.split('=')[1];
-					req.session.code = code;
-					res.render(
-						'pocket.ejs', {
-							code: code
-						}
-					);
-				}
-			);
-		}
-	);
-	app.get(
-		'/pocket/badge',
-		function(req, res) {
-			request.post(
-				'https://getpocket.com/v3/oauth/authorize',
-				{
-					form: {
-						'consumer_key': '52536-e13f20f362ab224fd17b5257',
-						'code': req.session.code
-					}
-				},
-				function(error, response, body) {
-					var token = body.split('access_token=')[1].split('&')[0];
-					var username = body.split('username=')[1];
-					request(
-						'https://getpocket.com/v3/get?access_token=' + token + '&consumer_key=52536-e13f20f362ab224fd17b5257&state=unread',
-						function(error, response, body) {
-							var unread = body;
-							request(
-								'https://getpocket.com/v3/get?access_token=' + token + '&consumer_key=52536-e13f20f362ab224fd17b5257&state=archive',
-								function(error, response, body) {
-									var read = body;
-									res.render(
-										'badge.ejs', {
-											token: token,
-											username: username,
-											read: read,
-											unread: unread
-										}
-									);
-								}
-							);
-						}
-					);
-				}
-			);
-		}
-	);
-
 	app.get(
 		'/login',
 		function(req, res) {
