@@ -1,0 +1,89 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Rate Sh☆★</title>
+	<% include partials/meta %>
+	<% include partials/stylesheets %>
+	<% include partials/favico %>
+</head>
+
+<body class="homepage">
+
+	<div class="header" id="top">
+
+		<h1>
+			Rate Sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span><br>
+		</h1>
+
+		<h2>
+			Map <span class="brackets"><span class="sh sh-user"></span>your</span> best <span class="brackets"><span class="sh sh-hashtag"></span>things</span> in <span class="brackets"><span class="sh sh-map-marker"></span>city</span>
+		</h2>
+
+	</div>
+
+	<div class="container">
+
+		<h3>
+			Start rating sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span> now with one-click signup:
+		</h3>
+
+		<p>
+			Login or Register with: 
+			<a href="/auth/instagram" class="pure-button pure-button-primary button-login">
+				<span class="sh sh-in5tagr4m"></span>
+				Instagram
+			</a>
+		</p>
+
+		<hr>
+
+		<h3>
+			Some sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span> people are rating:
+		</h3>
+
+		<script>
+			var limit = 1;
+			var usersTags = {}
+		</script>
+
+		<div class="pure-g">
+
+			<% 
+				var colHTML = 'pure-u-1 ';
+				if (users.length > 1) {
+					colHTML += 'pure-u-sm-1-2 ';
+				}
+				if (users.length > 2) {
+					colHTML += 'pure-u-md-1-3 ';
+				}
+			%>
+
+			<% users.forEach(function(user,index){ %>
+
+				<script>
+					usersTags['<%= user.instagram.username %>'] = {};
+					usersTags['<%= user.instagram.username %>'].userId = '<%= user.instagram.id %>';
+					usersTags['<%= user.instagram.username %>'].token = '<%= user.instagram.token %>';
+					usersTags['<%= user.instagram.username %>'].hashtags = ['<%= user.instagram.hashtags[0].tag %>'];
+					usersTags['<%= user.instagram.username %>'].locations = ['<%= user.instagram.hashtags[0].location %>'];
+				</script>
+
+				<div class="<%= colHTML %>">
+
+					<div id="<%= user.instagram.hashtags[0].tag %>" class="single"></div>
+
+				</div>
+
+			<% }) %>
+
+		</div>
+
+	</div>
+
+	<% include partials/footer %>
+		
+	<% include partials/scripts %>
+
+</body>
+</html>

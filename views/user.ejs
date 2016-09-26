@@ -1,0 +1,86 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title><%= user.instagram.username %>'s Rate Sh☆★</title>
+	<% include partials/meta %>
+	<% include partials/stylesheets %>
+	<% include partials/favico %>
+</head>
+<body>
+
+	<div class="header" id="top">
+
+		<h1>
+			<img src="<%= user.instagram.profile_picture %>" alt="<%= user.instagram.username %>" class="profile-img">
+			<%= user.instagram.username %>
+		</h1>
+
+	</div>
+
+	<script>
+		var limit = 1;
+		var usersTags = {}
+		usersTags['<%= user.instagram.username %>'] = {};
+		usersTags['<%= user.instagram.username %>'].userId = '<%= user.instagram.id %>';
+		usersTags['<%= user.instagram.username %>'].token = '<%= user.instagram.token %>';
+		usersTags['<%= user.instagram.username %>'].hashtags = [];
+		usersTags['<%= user.instagram.username %>'].locations = [];
+	</script>
+
+	<div class="container">
+
+		<p>
+			<%= user.instagram.bio %>
+		</p>
+
+		<p>
+			<a href="<%= user.instagram.website %>" class="pure-button pure-button-secondary" target="website">
+				<span class="sh sh-home"></span>
+				<%= user.instagram.website %>
+			</a>
+		</p>
+		
+		<hr>
+
+		<h2>
+			Some sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span> <%= user.instagram.username %> is rating:
+		</h2>
+
+		<div class="pure-g">
+
+			<% 
+				var colHTML = 'pure-u-1 ';
+				if (user.instagram.hashtags.length > 1) {
+					colHTML += 'pure-u-sm-1-2 ';
+				}
+				if (user.instagram.hashtags.length > 2) {
+					colHTML += 'pure-u-md-1-3 ';
+				}
+			%>
+
+			<% user.instagram.hashtags.forEach(function(hashtag,index){ %>
+
+				<script>
+					usersTags['<%= user.instagram.username %>'].hashtags.push('<%= hashtag.tag %>');
+					usersTags['<%= user.instagram.username %>'].locations.push('<%= hashtag.location %>');
+				</script>
+
+				<div class="<%= colHTML %>">
+
+					<div id="<%= hashtag.tag %>" class="single"></div>
+
+				</div>
+
+			<% }) %>
+
+		</div>
+		
+	</div>
+
+	<% include partials/footer %>
+		
+	<% include partials/scripts %>
+
+</body>
+</html>

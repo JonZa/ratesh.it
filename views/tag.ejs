@@ -1,0 +1,66 @@
+<!-- views/tag.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title><%= user.instagram.username %>'s Rate Sh☆★</title>
+	<% include partials/meta %>
+	<% include partials/stylesheets %>
+	<% include partials/favico %>
+</head>
+<body>
+
+	<div class="header" id="top">
+
+		<h1>
+			<img src="<%= user.instagram.profile_picture %>" alt="<%= user.instagram.username %>" class="profile-img">
+			<%= user.instagram.username %>
+		</h1>
+
+	</div>
+
+	<script>
+		var limit = 0;
+		var usersTags = {}
+		usersTags['<%= user.instagram.username %>'] = {};
+		usersTags['<%= user.instagram.username %>'].userId = '<%= user.instagram.id %>';
+		usersTags['<%= user.instagram.username %>'].token = '<%= user.instagram.token %>';
+		usersTags['<%= user.instagram.username %>'].hashtags = [];
+		usersTags['<%= user.instagram.username %>'].locations = [];
+	</script>
+
+	<div class="container">
+
+		<% user.instagram.hashtags.forEach(function(hashtag,index){ %>
+
+			<script>
+				usersTags['<%= user.instagram.username %>'].hashtags.push('<%= hashtag.tag %>');
+				usersTags['<%= user.instagram.username %>'].locations.push('<%= hashtag.location %>');
+			</script>
+
+			<h2>
+				#<%= hashtag.tag %> <%= hashtag.location %>
+			</h2>
+
+			<p><%= hashtag.description %></p>
+
+			<hr>
+
+			<p>
+				Sorted by:
+				<a href="#<%= hashtag.tag %>" data-sort="date" class="active">date</a>
+					|
+				<a href="#<%= hashtag.tag %>" data-sort="score">score</a>
+			</p>
+
+			<div id="<%= hashtag.tag %>" class="pure-g"></div>
+
+		<% }) %>
+
+	</div>
+
+	<% include partials/footer %>
+		
+	<% include partials/scripts %>
+
+</body>
+</html>

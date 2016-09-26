@@ -1,0 +1,167 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Rate your sh☆★</title>
+	<% include partials/meta %>
+	<% include partials/stylesheets %>
+	<% include partials/favico %>
+
+</head>
+<body>
+
+	<div class="header" id="top">
+
+		<h1>
+			<img src="<%= user.instagram.profile_picture %>" alt="<%= user.instagram.username %>" class="profile-img">
+			You
+		</h1>
+
+	</div>
+
+	<div class="container left">
+	
+		<div class="pure-g">
+
+			<div class="pure-u-1 pure-u-md-1-2 new">
+	
+				<form action="/profile/new" method="post" accept-charset="utf-8" class="pure-form pure-form-stacked">
+
+					<h2>
+						Rate new sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span>
+					</h2>
+
+					<fieldset>
+
+						<label for="tag">What hashtag are you using?</label>
+						<input type="text" name="tag" placeholder="e.g. #hotdogs" class="pure-input-1">
+					
+					</fieldset>
+
+					<fieldset>
+
+						<label for="description">What are you rating?</label>
+						<textarea name="description" rows="5" placeholder="e.g. A hot dog is a cooked sausage, traditionally grilled or steamed and served in a sliced bun." class="pure-input-1"></textarea>
+					
+					</fieldset>
+
+					<fieldset>
+
+						<label for="location">What city are you mapping?</label>
+						<input type="text" name="location" placeholder="e.g. New York" class="pure-input-1">
+					
+					</fieldset>
+
+					<fieldset>
+
+						<button type="submit" class="pure-button pure-button-primary"><span class="sh sh-check-square"></span> Save</button>
+					
+					</fieldset>
+
+				</form>
+	
+			</div>
+	
+			<div class="pure-u-1 pure-u-md-1-2 formatting">
+
+				<h2>
+					Formatting
+				</h2>
+
+				<p>
+					<span class="sh sh-hashtag"></span> Include your hashtag and score in your caption:<br>
+					e.g. <span class="brackets">#hotdog 6/10</span></li>
+				</p>
+
+				<p>
+					<span class="sh sh-map-marker"></span> Add the location:<br>
+					e.g. <span class="brackets">Nathan's Famous</span>
+				</p>
+
+				<p>
+					<span class="sh sh-trophy"></span> Use double quotes to add a badge, but keep it short:<br>
+					e.g. <span class="brackets">"Iconic NY Location"</span>
+				</p>
+
+			</div>
+
+		</div>
+
+		<% if (user.instagram.hashtags.length > 0) { %>
+
+		<hr>
+
+		<h2>Sh<span class="sh sh-star-o"></span><span class="sh sh-star"></span> you're already rating</h2>
+
+		<div class="pure-g">
+
+			<% user.instagram.hashtags.forEach(function(hashtag,index){ %>
+
+			<div class="pure-u-1 pure-u-md-1-2">
+
+				<form action="/profile/update" method="post" accept-charset="utf-8" class="pure-form pure-form-stacked">
+
+					<p>
+
+						<a href="/<%= user.instagram.username %>/<%= hashtag.tag %>" class="pure-button pure-button-secondary" target="website">
+							<span class="sh sh-hashtag"></span><%= hashtag.tag %>
+						</a>
+
+					</p>
+					
+					<input type="hidden" name="_id" value="<%= hashtag._id %>">
+
+					<fieldset>
+
+						<label for="tag">
+
+							Hashtag
+
+						</label>
+
+						<input type="text" name="tag" value="<%= hashtag.tag %>" placeholder="Hashtag" class="pure-input-1">
+
+					</fieldset>
+
+					<fieldset>
+
+						<label for="description">Description</label>
+
+						<textarea name="description" rows="5" placeholder="Description" class="pure-input-1"><%= hashtag.description %></textarea>
+
+					</fieldset>
+
+					<fieldset>
+
+						<label for="description">City</label>
+
+						<input type="text" name="location" value="<%= hashtag.location %>" placeholder="City" class="pure-input-1">
+
+					</fieldset>
+
+					<fieldset>
+
+						<button type="submit" class="pure-button pure-button-primary"><span class="sh sh-check-square"></span> Update</button>
+
+						<button type="button" class="pure-button pure-button-link"><span class="sh sh-minus-square"></span> Remove</button>
+
+					</fieldset>
+
+				</form>
+
+			</div>
+	
+			<% }) %>
+
+		</div>
+
+		<% } %>
+	
+	</div>
+
+	<% include partials/footer %>
+		
+	<% include partials/scripts %>
+
+</body>
+</html>

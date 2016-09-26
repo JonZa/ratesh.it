@@ -1,0 +1,92 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Pocket Badge</title>
+
+</head>
+<body>
+	<p class="loading"><strong><%= username %></strong>! Hold on a sec, because stuff! And things!</p>
+	<div class="hide" style="display: none;">
+		<p>Holy quacamole, <strong><%= username %></strong>!</p>
+		<p>You've read <strong class="readArticles"></strong> articles, a total of <strong class="readWords"></strong> words!</p>
+		<p>And you've still got <strong class="unreadArticles"></strong> articles and <strong class="unreadWords"></strong> words to go!</p>
+		<p>
+			<span class="obamaWords"></span>
+			<span class="trumpWords"></span>
+			<span class="isisWords"></span>
+			<span class="appleWords"></span>
+			<span class="howtoWords"></span>
+			<span class="sexWords"></span>
+		</p>
+		<form>
+			<input type="text" name="phrase" placeholder="Search article titles">
+			<button type="submit">Search</button>
+			<p class="phraseWords"></p>
+		</form>
+	</div>
+	<script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+	<script src="/js/plugins.min.js"></script>
+	<script id="arrays">
+		var read = <%- read %>;
+		var unread = <%- unread %>;
+	</script>
+	<script>
+		$('.loading').remove();
+		$('.hide').show();
+		var titles = [];
+		var readArticles = 0;
+		var readWords = 0;
+		var unreadArticles = 0;
+		var unreadWords = 0;
+		$.each(
+			read.list,
+			function(i,elem) {
+				readArticles++;
+				if (Number.isInteger(Number(elem.word_count))) {
+					readWords += Number(elem.word_count);
+				}
+				var title = elem.given_title.toLowerCase();
+				titles.push(title)
+			}
+		);
+		$.each(
+			unread.list,
+			function(i,elem) {
+				unreadArticles++;
+				if (Number.isInteger(Number(elem.word_count))) {
+					unreadWords += Number(elem.word_count);
+				}
+				var title = elem.given_title.toLowerCase();
+				titles.push(title)
+			}
+		);
+		$('#arrays').remove();
+		$('.readArticles').text(readArticles);
+		$('.readWords').text(readWords);
+		$('.unreadArticles').text(unreadArticles);
+		$('.unreadWords').text(unreadWords);
+		function countWords(phrase) {
+			return titles.filter(
+				function(value){
+				return value.indexOf(phrase) >= 0
+			}).length;
+		}
+		$('.isisWords').replaceWith('<strong>' + countWords('isis') + '</strong> articles about ISIS! ');
+		$('.obamaWords').replaceWith('<strong>' + countWords('obama') + '</strong> articles about Obama! ');
+		$('.trumpWords').replaceWith('<strong>' + countWords('trump') + '</strong> articles about Trump! ');
+		$('.appleWords').replaceWith('<strong>' + countWords('apple') + '</strong> articles about Apple! ');
+		$('.howtoWords').replaceWith('<strong>' + countWords('how to') + '</strong> articles about how to do stuff! ');
+		$('.sexWords').replaceWith('And oh dear, <strong>' + countWords('sex') + '</strong> articles about sex! ' + ((countWords('sex') > 5) ? 'Pervert!' : ''));
+		$('form').on(
+			'submit',
+			function(e) {
+				e.preventDefault();
+				var phrase = $('[name="phrase"]').val();
+				$('.phraseWords').html('<strong>' + countWords(phrase) + '</strong> articles about ' + phrase + '! ');
+			}
+		);
+	</script>
+	
+</body>
+</html>
